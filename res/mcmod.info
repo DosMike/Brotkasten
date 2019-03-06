@@ -1,0 +1,10 @@
+[{
+  "modid": "brotkasten",
+  "name": "Brotkasten",
+  "description": "A Boss Bar, Title and Chat broadcast plugin",
+  "version": "0.1",
+  "url": "",
+  "authorList": [ "DosMike" ],
+  "requiredMods": [ "spongeapi@7.0.0" ],
+  "dependencies": [ "spongeapi@7.0.0" ]
+}]
