@@ -96,14 +96,12 @@ public class BossBarConfiguration {
                 if (time <= 0)
                     throw new IllegalArgumentException("Please specify a positive timespan");
                 result.displayTime = (int)(time * 20);
-                Brotkasten.l("Setting displaytime for %s to %d ticks", result.display.toPlain(), result.displayTime);
             } else if (arg.endsWith("min")) {
                 Float time = getFloat(arg);
                 if (time == null)
                     throw new IllegalArgumentException("Invalid time format, use 10sec or 1min");
                 if (time <= 0)
                     throw new IllegalArgumentException("Please specify a positive timespan");
-                Brotkasten.l("Setting displaytime for %s to %d ticks", result.display.toPlain(), result.displayTime);
                 result.displayTime = (int) (time * 1200);
             } else if (arg.equalsIgnoreCase("infinite")) {
                 result.displayTime = -1;

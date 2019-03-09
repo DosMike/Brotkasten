@@ -74,7 +74,7 @@ public class ChatManager implements IBroadcastManager {
             if (++messageIndex >= messages.size()) {
                 messageIndex = 0;
             }
-            Sponge.getServer().getBroadcastChannel().send(messages.get(messageIndex));
+            Brotkasten.getInstance().getServerChat().broadcast(messages.get(messageIndex));
             passedTime=0;
         }
     }

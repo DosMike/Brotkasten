@@ -26,12 +26,13 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-@Plugin(id="brotkasten", name="Brotkasten", version="0.1", authors={"DosMike"})
+@Plugin(id="brotkasten", name="Brotkasten", version="0.2", authors={"DosMike"})
 final public class Brotkasten {
     public static void main(String[] args) { System.err.println("This plugin can not be run as executable!"); }
 
     static Brotkasten instance = null;
     private static ServerBossBar serverBossBar;
+    private static ServerChat serverChat;
 
     public Brotkasten() {
         instance = this;
@@ -56,21 +57,43 @@ final public class Brotkasten {
         return instance;
     }
 
+    public ServerChat getServerChat() {
+        return serverChat;
+    }
+
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         CommandRegistra.registerCommands();
         loadConfig(null);
         Sponge.getEventManager().registerListeners(this, new EventListener());
-        serverBossBar = ServerBossBar.builder()
-                .visible(false)
-                .darkenSky(false)
-                .createFog(false)
-                .playEndBossMusic(false)
-                .name(Text.of("Template"))
-                .percent(1f)
-                .color(BossBarColors.WHITE)
-                .overlay(BossBarOverlays.PROGRESS)
-                .build();
+        try {
+            //Check if PlaceHolderAPI is present
+            getClass().getClassLoader().loadClass("me.rojo8399.placeholderapi.impl.PlaceholderAPIPlugin");
+            //use placeholder API
+            serverBossBar = new PlaceholderBossBar();
+            serverBossBar
+                    .setName(Text.EMPTY)
+                    .setVisible(false)
+                    .setDarkenSky(false)
+                    .setCreateFog(false)
+                    .setPlayEndBossMusic(false)
+                    .setPercent(1f)
+                    .setColor(BossBarColors.WHITE)
+                    .setOverlay(BossBarOverlays.PROGRESS);
+            serverChat = new PlaceholderServerChat();
+        } catch (Exception e) {
+            serverBossBar = ServerBossBar.builder()
+                    .name(Text.EMPTY)
+                    .visible(false)
+                    .darkenSky(false)
+                    .createFog(false)
+                    .playEndBossMusic(false)
+                    .percent(1f)
+                    .color(BossBarColors.WHITE)
+                    .overlay(BossBarOverlays.PROGRESS)
+                    .build();
+            serverChat = new ServerChat();
+        }
 
         broadcastTask = Task.builder()
                 .execute(this::BroadcastTick)
@@ -110,7 +133,7 @@ final public class Brotkasten {
             group = root.getNode("Chat");
 
             chatManager.load(group.getNode("Messages").getList(TypeToken.of(String.class)), responsible==null?Sponge.getServer().getConsole():responsible);
-            chatManager.setMinDelay(Math.max(1, group.getNode("MinDelay").getInt(20)*20));
+            chatManager.setMinDelay(Math.max(1, group.getNode("Delay").getInt(20)*20));
         } catch (IOException|ObjectMappingException e) {
             e.printStackTrace();
             if (responsible != null)
