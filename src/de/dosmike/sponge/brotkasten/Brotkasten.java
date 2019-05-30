@@ -64,7 +64,6 @@ final public class Brotkasten {
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         CommandRegistra.registerCommands();
-        loadConfig(null);
         Sponge.getEventManager().registerListeners(this, new EventListener());
         try {
             //Check if PlaceHolderAPI is present
@@ -94,6 +93,7 @@ final public class Brotkasten {
                     .build();
             serverChat = new ServerChat();
         }
+        loadConfig(null);
 
         broadcastTask = Task.builder()
                 .execute(this::BroadcastTick)

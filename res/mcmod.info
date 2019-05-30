@@ -2,7 +2,7 @@
   "modid": "brotkasten",
   "name": "Brotkasten",
   "description": "A Boss Bar, Title and Chat broadcast plugin",
-  "version": "0.2",
+  "version": "0.3",
   "url": "",
   "authorList": [ "DosMike" ],
   "requiredMods": [ "spongeapi@7.0.0" ],
