@@ -26,12 +26,12 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-@Plugin(id="brotkasten", name="Brotkasten", version="0.2", authors={"DosMike"})
+@Plugin(id="brotkasten", name="Brotkasten", version="0.4", authors={"DosMike"})
 final public class Brotkasten {
     public static void main(String[] args) { System.err.println("This plugin can not be run as executable!"); }
 
     static Brotkasten instance = null;
-    private static ServerBossBar serverBossBar;
+    private static BossBarWrapper serverBossBar;
     private static ServerChat serverChat;
 
     public Brotkasten() {
@@ -49,7 +49,7 @@ final public class Brotkasten {
         instance.logger.warn(String.format(format, args));
     }
 
-    public ServerBossBar getServerBossBar() {
+    public BossBarWrapper getServerBossBar() {
         return serverBossBar;
     }
 
@@ -69,28 +69,10 @@ final public class Brotkasten {
             //Check if PlaceHolderAPI is present
             getClass().getClassLoader().loadClass("me.rojo8399.placeholderapi.impl.PlaceholderAPIPlugin");
             //use placeholder API
-            serverBossBar = new PlaceholderBossBar();
-            serverBossBar
-                    .setName(Text.EMPTY)
-                    .setVisible(false)
-                    .setDarkenSky(false)
-                    .setCreateFog(false)
-                    .setPlayEndBossMusic(false)
-                    .setPercent(1f)
-                    .setColor(BossBarColors.WHITE)
-                    .setOverlay(BossBarOverlays.PROGRESS);
+            serverBossBar = new PlaceholderBossBarWrapper();
             serverChat = new PlaceholderServerChat();
         } catch (Exception e) {
-            serverBossBar = ServerBossBar.builder()
-                    .name(Text.EMPTY)
-                    .visible(false)
-                    .darkenSky(false)
-                    .createFog(false)
-                    .playEndBossMusic(false)
-                    .percent(1f)
-                    .color(BossBarColors.WHITE)
-                    .overlay(BossBarOverlays.PROGRESS)
-                    .build();
+            serverBossBar = new BossBarWrapper();
             serverChat = new ServerChat();
         }
         loadConfig(null);

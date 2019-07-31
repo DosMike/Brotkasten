@@ -35,7 +35,7 @@ public class BossBarConfiguration {
     }
 
     public void apply() {
-        ServerBossBar bar = Brotkasten.getInstance().getServerBossBar();
+        BossBarWrapper bar = Brotkasten.getInstance().getServerBossBar();
         bar.setName(display);
         bar.setColor(color);
         bar.setOverlay(overlay);
@@ -47,7 +47,7 @@ public class BossBarConfiguration {
     /** @return true if all game ticks for this bossbar passed */
     public boolean tick() {
         passedTime++;
-        BossBar bar = Brotkasten.getInstance().getServerBossBar();
+        BossBarWrapper bar = Brotkasten.getInstance().getServerBossBar();
         float newPercent = displayTime<1?1f:(float)(from+(to-from)*((double)passedTime/displayTime));
         if (ticks > 0)
             newPercent = (float)Math.floor(ticks * newPercent)/ticks;
