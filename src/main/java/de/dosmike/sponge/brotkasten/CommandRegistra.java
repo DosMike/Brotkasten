@@ -1,17 +1,17 @@
 package de.dosmike.sponge.brotkasten;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.boss.*;
+import org.spongepowered.api.boss.BossBarColor;
+import org.spongepowered.api.boss.BossBarColors;
+import org.spongepowered.api.boss.BossBarOverlay;
+import org.spongepowered.api.boss.BossBarOverlays;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.args.CommandFlags;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
-
-import java.io.IOException;
 
 final public class CommandRegistra {
 

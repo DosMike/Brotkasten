@@ -1,6 +1,9 @@
 package de.dosmike.sponge.brotkasten;
 
-import org.spongepowered.api.boss.*;
+import org.spongepowered.api.boss.BossBarColor;
+import org.spongepowered.api.boss.BossBarColors;
+import org.spongepowered.api.boss.BossBarOverlay;
+import org.spongepowered.api.boss.BossBarOverlays;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 

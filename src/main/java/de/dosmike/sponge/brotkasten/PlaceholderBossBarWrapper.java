@@ -2,7 +2,7 @@ package de.dosmike.sponge.brotkasten;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.boss.*;
+import org.spongepowered.api.boss.ServerBossBar;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 

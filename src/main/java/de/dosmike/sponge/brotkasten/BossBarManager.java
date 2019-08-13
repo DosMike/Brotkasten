@@ -40,6 +40,9 @@ public class BossBarManager implements IBroadcastManager {
             if (!bossBars.isEmpty()) {
                 activeBossBarIndex = 0;
                 next();
+            } else {
+                if (Brotkasten.getInstance().getServerBossBar().isVisible())
+                    Brotkasten.getInstance().getServerBossBar().setVisible(false);
             }
         } else if (waiting) {
             if (passedTime >= minDelay) {

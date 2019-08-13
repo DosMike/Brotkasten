@@ -60,6 +60,17 @@ Chat {
         "&eLost? Click [here](/spawn) &eto get back to spawn"
     ]
 }
+# It's strongly recommended to enable automatic version checking,
+# This will also inform you about changes in dependencies.
+# Set this value to true to allow this Plugin to check for Updates on Ore
+VersionChecker=true
 ```
 
-### This plugin has no metrics or other connections to third party services
+### External Connections
+
+**[Version Checker](https://github.com/DosMike/SpongePluginVersionChecker)**  
+This plugin uses a version checker to notify you about available updates.  
+This updater is **disabled by default** and can be enabled in `config/brotkasten.conf`
+by setting the value `VersionChecker` to `true`.  
+If enabled it will asynchronously check (once per server start) if the Ore repository has any updates.  
+This will *only print update notes into the server log*, no files are being downlaoded!
