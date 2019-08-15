@@ -33,10 +33,10 @@ targetCompatibility = 1.8
 
 
 dependencies {
-    compile 'org.jetbrains:annotations:16.0.2'
-    compile 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
-	compile files('../../../libs/ftp4j/ftp4j-1.7.2.jar')
-    compile files('../../../libs/PlaceholderAPI-4.5.1.jar') //git repo is no jitpack compatible or jitpack is heckin slow
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+    compileOnly 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
+    compileOnly files('../../../libs/ftp4j/ftp4j-1.7.2.jar')
+    compileOnly files('../../../libs/PlaceholderAPI-4.5.1.jar') //git repo is no jitpack compatible or jitpack is heckin slow
     shadow 'com.github.DosMike:SpongePluginVersionChecker:master-SNAPSHOT'
 }
 
