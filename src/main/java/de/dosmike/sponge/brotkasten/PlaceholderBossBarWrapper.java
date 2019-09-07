@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class PlaceholderBossBarWrapper extends BossBarWrapper {
 
     private PlaceholderService placeholders;
-    private HashMap<UUID, ServerBossBar> instances = new HashMap<>();
 
     public PlaceholderBossBarWrapper() throws NoSuchElementException {
         placeholders = Sponge.getServiceManager().provide(PlaceholderService.class).get();
@@ -37,15 +36,6 @@ public class PlaceholderBossBarWrapper extends BossBarWrapper {
     }
 
     @Override
-    public PlaceholderBossBarWrapper removePlayer(Player player) {
-        players.remove(player.getUniqueId());
-        ServerBossBar bar = instances.remove(player.getUniqueId());
-        if (bar != null)
-            bar.removePlayers(bar.getPlayers());
-        return this;
-    }
-
-    @Override
     public Set<Player> getPlayers() {
         return players.stream()
                 .map(uid->Sponge.getServer().getPlayer(uid).orElse(null))
@@ -54,17 +44,21 @@ public class PlaceholderBossBarWrapper extends BossBarWrapper {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         for (Map.Entry<UUID, ServerBossBar> e : instances.entrySet()) {
             Player player = Sponge.getServer().getPlayer(e.getKey()).orElse(null);
             if (player == null) continue;
-            e.getValue()
-                    .setVisible(visible)
-                    .setPercent(percent)
-                    .setName(getNamePlaceholder(name, player))
-                    .setColor(color)
-                    .setOverlay(overlay)
-            ;
+            if (forceShow || !Brotkasten.getInstance().bossBarManager.isMuted(player)) {
+                e.getValue()
+                        .setVisible(visible)
+                        .setPercent(percent)
+                        .setName(getNamePlaceholder(name, player))
+                        .setColor(color)
+                        .setOverlay(overlay)
+                ;
+            } else {
+                e.getValue().setVisible(false);
+            }
         }
     }
 

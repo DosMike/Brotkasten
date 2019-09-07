@@ -19,13 +19,13 @@ public class BossBarConfiguration {
     private Float from=0f, to=1f;
     private int displayTime=200, passedTime;
     private int ticks=-1;
+    private boolean forceShow = false;
 
     private BossBarConfiguration() {}
     public BossBarConfiguration(BossBarColor color, BossBarOverlay overlay, Text display, int displayTime) {
         this.color = color;
         this.overlay = overlay;
         this.display = display;
-        this.ticks=-1;
         if (displayTime <= 0) {
             this.from=1f;
             this.to=1f;
@@ -37,6 +37,13 @@ public class BossBarConfiguration {
         }
     }
 
+    public void setForceShow(boolean force) {
+        forceShow = force;
+    }
+    public boolean doForceShow() {
+        return forceShow;
+    }
+
     public void apply() {
         BossBarWrapper bar = Brotkasten.getInstance().getServerBossBar();
         bar.setName(display);
@@ -44,6 +51,7 @@ public class BossBarConfiguration {
         bar.setOverlay(overlay);
         bar.setPercent(from);
         bar.setVisible(true);
+        bar.update();
         passedTime = 0;
     }
 
@@ -55,6 +63,7 @@ public class BossBarConfiguration {
         if (ticks > 0)
             newPercent = (float)Math.floor(ticks * newPercent)/ticks;
         bar.setPercent(Math.max(0f, Math.min(1f, newPercent)));
+        bar.update();
         if (displayTime <= 0)
             return false; //never finish
         else

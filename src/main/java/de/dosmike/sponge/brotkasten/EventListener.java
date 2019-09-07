@@ -13,6 +13,7 @@ public class EventListener {
     @Listener
     public void onPlayerPart(ClientConnectionEvent.Disconnect event) {
         Brotkasten.getInstance().getServerBossBar().removePlayer(event.getTargetEntity());
+        Brotkasten.getInstance().bossBarManager.unmute(event.getTargetEntity());
     }
 
 }

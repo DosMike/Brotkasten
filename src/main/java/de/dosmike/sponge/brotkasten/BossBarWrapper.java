@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class BossBarWrapper {
 
+    protected HashMap<UUID, ServerBossBar> instances = new HashMap<>();
+
     protected Text name = Text.EMPTY;
     protected float percent = 0f;
     protected BossBarColor color = BossBarColors.WHITE;
@@ -21,19 +23,16 @@ public class BossBarWrapper {
     protected final UUID uid = UUID.randomUUID();
     protected boolean visible = true;
     protected Set<UUID> players = new HashSet<>();
-    private ServerBossBar instance;
+    protected boolean forceShow = false;
 
     public BossBarWrapper() throws NoSuchElementException {
-        instance = ServerBossBar.builder()
-                .name(Text.EMPTY)
-                .visible(false)
-                .darkenSky(false)
-                .createFog(false)
-                .playEndBossMusic(false)
-                .percent(1f)
-                .color(BossBarColors.WHITE)
-                .overlay(BossBarOverlays.PROGRESS)
-                .build();
+    }
+
+    public void setForceShow(boolean force) {
+        forceShow = force;
+    }
+    public boolean doForceShow() {
+        return forceShow;
     }
 
     public Text getName() {
@@ -42,7 +41,6 @@ public class BossBarWrapper {
 
     public BossBarWrapper setName(Text name) {
         this.name = name;
-        update();
         return this;
     }
 
@@ -52,7 +50,6 @@ public class BossBarWrapper {
 
     public BossBarWrapper setPercent(float percent) {
         this.percent = percent;
-        update();
         return this;
     }
 
@@ -62,7 +59,6 @@ public class BossBarWrapper {
 
     public BossBarWrapper setColor(BossBarColor color) {
         this.color = color;
-        update();
         return this;
     }
 
@@ -72,7 +68,6 @@ public class BossBarWrapper {
 
     public BossBarWrapper setOverlay(BossBarOverlay overlay) {
         this.overlay = overlay;
-        update();
         return this;
     }
 
@@ -82,7 +77,6 @@ public class BossBarWrapper {
 
     public BossBarWrapper setVisible(boolean visible) {
         this.visible = visible;
-        update();
         return this;
     }
 
@@ -91,12 +85,27 @@ public class BossBarWrapper {
     }
 
     public BossBarWrapper addPlayer(Player player) {
-        instance.addPlayer(player);
+        ServerBossBar bar = ServerBossBar.builder()
+                .percent(percent)
+                .overlay(overlay)
+                .color(color)
+                .name(name)
+                .playEndBossMusic(playMusic)
+                .createFog(createFog)
+                .darkenSky(darkenSky)
+                .visible(visible)
+                .build()
+                .addPlayer(player);
+        players.add(player.getUniqueId());
+        instances.put(player.getUniqueId(), bar);
         return this;
     }
 
     public BossBarWrapper removePlayer(Player player) {
-        instance.removePlayer(player);
+        players.remove(player.getUniqueId());
+        ServerBossBar bar = instances.remove(player.getUniqueId());
+        if (bar != null)
+            bar.removePlayers(bar.getPlayers());
         return this;
     }
 
@@ -107,14 +116,34 @@ public class BossBarWrapper {
                 .collect(Collectors.toSet());
     }
 
-    protected void update() {
-        instance
-            .setVisible(visible)
-            .setPercent(percent)
-            .setName(name)
-            .setColor(color)
-            .setOverlay(overlay)
-        ;
+    /** Needs to be called after performing changes to go through all
+     * bossbars for the different players and actually display the changes */
+    public void update() {
+        for (Map.Entry<UUID, ServerBossBar> e : instances.entrySet()) {
+            Player player = Sponge.getServer().getPlayer(e.getKey()).orElse(null);
+            if (player == null) continue;
+            if (forceShow || !Brotkasten.getInstance().bossBarManager.isMuted(player)) {
+                e.getValue()
+                        .setVisible(visible)
+                        .setPercent(percent)
+                        .setName(name)
+                        .setColor(color)
+                        .setOverlay(overlay)
+                ;
+            } else {
+                e.getValue().setVisible(false);
+            }
+        }
+    }
+
+    public void updateMuteState(Player player) {
+        if (players.contains(player.getUniqueId())) {
+            if (!forceShow && Brotkasten.getInstance().bossBarManager.isMuted(player)) {
+                instances.get(player.getUniqueId()).setVisible(false);
+            } else {
+                instances.get(player.getUniqueId()).setVisible(visible);
+            }
+        }
     }
 
 }

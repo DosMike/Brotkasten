@@ -24,6 +24,18 @@ A simple plugin for BossBar and Chat broadcasts.
 `/bossbar continue`  
 **Permission:** brotkasten.command.bossbar (base command), brotkasten.command.bossbar.skip (continue schedule)  
 
+#### Mute and unmute the boss bar cycle
+`/bossbar mute`   
+`/bossbar hide`   
+`/bossbar off`   
+`/bossbar disable`   
+`/bossbar unmute`   
+`/bossbar show`   
+`/bossbar on`   
+`/bossbar enable`   
+**Permission:** brotkasten.command.bossbar (base command), brotkasten.command.bossbar.mute (mute and unmute the bossbar)   
+*This does not hide bossbars that are set by admins or commandblocks (or bosses)*
+
 ### Config
 ```
 # Messages that will be displayed as boss bar

@@ -24,7 +24,7 @@ import org.spongepowered.api.text.format.TextColors;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-@Plugin(id="brotkasten", name="Brotkasten", version="0.4.1")
+@Plugin(id="brotkasten", name="Brotkasten", version="0.4.2")
 final public class Brotkasten {
     public static void main(String[] args) { System.err.println("This plugin can not be run as executable!"); }
 

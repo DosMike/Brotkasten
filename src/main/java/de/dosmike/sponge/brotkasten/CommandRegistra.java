@@ -9,6 +9,7 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
@@ -18,7 +19,7 @@ final public class CommandRegistra {
     public static void registerCommands() {
         Sponge.getCommandManager().register(Brotkasten.getInstance(), CommandSpec.builder()
                 .permission("brotkasten.command.brotkasten")
-                .description(Text.of("Start a round of minesweeper"))
+                .description(Text.of("Brotkasten management command"))
                 .arguments(
                         GenericArguments.none()
                 ).child(CommandSpec.builder()
@@ -33,7 +34,7 @@ final public class CommandRegistra {
 
         Sponge.getCommandManager().register(Brotkasten.getInstance(), CommandSpec.builder()
                 .permission("brotkasten.command.bossbar")
-                .description(Text.of("Start a round of minesweeper"))
+                .description(Text.of("Command to manage the bossbar"))
                 .arguments(
                         GenericArguments.none()
                 ).child(CommandSpec.builder()
@@ -80,6 +81,7 @@ final public class CommandRegistra {
                                 BossBarConfiguration bbc = new BossBarConfiguration(
                                         color, overlay, display, displayTime
                                 );
+                                bbc.setForceShow(true);
                                 Brotkasten.getInstance().bossBarManager.set(bbc);
 
                             } catch (RuntimeException e) {
@@ -106,6 +108,32 @@ final public class CommandRegistra {
                             return CommandResult.success();
                         })
                         .build(), "skip", "next", "continue")
+                .child(CommandSpec.builder()
+                        .permission("brotkasten.command.bossbar.mute")
+                        .description(Text.of("Hides the default cyclic boss-bars for you"))
+                        .arguments(
+                                GenericArguments.none()
+                        )
+                        .executor((src, args)->{
+                            if (!(src instanceof Player)) throw new CommandException(Text.of("Console can't mute boss-bars"));
+                            Brotkasten.getInstance().bossBarManager.mute((Player) src);
+                            src.sendMessage(Text.of(TextColors.GREEN, "BossBars are muted for you for this session"));
+                            return CommandResult.success();
+                        })
+                        .build(), "mute", "hide", "off", "disable")
+                .child(CommandSpec.builder()
+                        .permission("brotkasten.command.bossbar.mute")
+                        .description(Text.of("Shows the default cyclic boss-bars again"))
+                        .arguments(
+                                GenericArguments.none()
+                        )
+                        .executor((src, args)->{
+                            if (!(src instanceof Player)) throw new CommandException(Text.of("Console can't mute boss-bars"));
+                            Brotkasten.getInstance().bossBarManager.unmute((Player) src);
+                            src.sendMessage(Text.of(TextColors.GREEN, "BossBars will play again"));
+                            return CommandResult.success();
+                        })
+                        .build(), "unmute", "show", "on", "enable")
                 .build(), "bossbar", "bb");
     }
 
